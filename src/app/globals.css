@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @layer components {
-  input~label {
+  div.flyable label.flyable {
     @apply absolute;
+    transition: all 0.2s ease;
   }
   
-  input:focus~label,
-  input:not(:placeholder-shown)~label {
-    @apply -top-8 -left-2.5;
+  div.flyable.flying label.flyable {
+    @apply -top-8 -left-4;
   }
 
   a {
@@ -81,7 +81,7 @@ body {
   transition: all 0.5s ease;
 }
 
-.sidebarCollapseButton {
+.sidebarCollapseButton, .dropdownTriggerButton {
   top: calc(50% - 2rem);
 }
 
@@ -101,4 +101,8 @@ body {
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+}
+
+.outline-auto {
+  outline: auto;
 }

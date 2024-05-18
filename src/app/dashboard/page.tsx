@@ -1,10 +1,10 @@
 'use client';
 
 import { useLocalStorage } from "@/lib/utils/localStorage";
-import Consts from "@/lib/consts";
+import { LocalStorageKeys } from "@/lib/consts";
 
 export default function DashboardPage() {
-    const [ userId ] = useLocalStorage<string>(Consts.LocalStorageKeys.userId);
+    const [ userId ] = useLocalStorage<string>(LocalStorageKeys.userId);
     
     return (
       <>

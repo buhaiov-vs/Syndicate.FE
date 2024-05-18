@@ -1,13 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { useCallback, useState } from 'react';
-import { deleteService, draftService } from '../actions';
-import ErrorText from '@/components/ErrorText';
+import { deleteService } from '../actions';
 import React from 'react';
 import { Service } from '../types/service';
 import { ResponseErrorType } from '@/lib/types/response';
-import Loader from '@/components/Loader/loader';
+import { ErrorText, Loader } from '@/lib/components';
 
 type ServiceDeleteProps = {
     service: Service,
@@ -15,7 +13,7 @@ type ServiceDeleteProps = {
     onDecline: () => void
 }
 
-export default function ServiceDeletePrompt({ service, onApprove, onDecline }: ServiceDeleteProps) {
+export function ServiceDeletePrompt({ service, onApprove, onDecline }: ServiceDeleteProps) {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ error, setError ] = useState("");
 
@@ -36,14 +34,14 @@ export default function ServiceDeletePrompt({ service, onApprove, onDecline }: S
     } finally {
         setIsLoading(false);
     }
-  }, []);
+  }, [onApprove, service]);
 
   return isLoading ? (
       <Loader text='Deleting in progress...' />
     ) : (
       <div className="flex flex-col pl-2 justify-center py-4">
         <div className='flex justify-center items-center text-center'>
-          Are you sure deleting "{service.name}" service?
+          Are you sure deleting &quot;{service.name}&quot; service?
         </div>
         <div className='flex flex-row justify-evenly mt-2'>
           <div
@@ -59,7 +57,7 @@ export default function ServiceDeletePrompt({ service, onApprove, onDecline }: S
             Cancel
           </div>
         </div>
-        <ErrorText condition={error} className='pl-2'>{error}</ErrorText>
+        <ErrorText className='pl-2'>{error}</ErrorText>
       </div>
     );
 }

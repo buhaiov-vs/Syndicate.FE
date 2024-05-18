@@ -36,7 +36,7 @@ export default function useFetch<TData>(
         };
 
         fetchData();
-    }, [request]);
+    }, [request, fetcher]);
 
     return { data, error, isLoading };
 };

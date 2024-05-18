@@ -3,15 +3,15 @@
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import { draftService } from '../actions';
-import ErrorText from '@/components/ErrorText';
 import React from 'react';
 import { Service } from '../types/service';
+import { ErrorText } from '@/lib/components';
 
 type NewServiceInputProps = {
     onSubmit: (newService: Service) => void
 }
 
-export default function NewServiceInput({ onSubmit }: NewServiceInputProps) {
+export function NewServiceInput({ onSubmit }: NewServiceInputProps) {
   const [ newName, setNewName ] = useState("");
   const [ error, setError ] = useState("");
 
@@ -30,7 +30,7 @@ export default function NewServiceInput({ onSubmit }: NewServiceInputProps) {
     } else {
       onSubmit(result);
     }
-  }, [newName]);
+  }, [newName, onSubmit]);
 
   return (
     <div className="flex flex-col pl-2">
@@ -53,7 +53,7 @@ export default function NewServiceInput({ onSubmit }: NewServiceInputProps) {
           />
         </div>
       </div>
-      <ErrorText condition={error}>{error}</ErrorText>
+      <ErrorText>{error}</ErrorText>
     </div>
   );
 }

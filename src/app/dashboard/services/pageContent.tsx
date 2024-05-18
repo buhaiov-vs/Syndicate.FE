@@ -1,17 +1,14 @@
 'use client';
 
 import ActionsBar from "@/components/ActionsBar/ActionsBar";
-import Loader from "@/components/Loader/loader";
-import SearchBar from "@/components/SearchBar/searchBar";
-import Image from 'next/image';
 import { useCallback, useEffect, useState } from "react";
-import NewServiceInput from './components/NewServiceInput';
-import ServiceDeletePrompt from './components/ServiceDeletePrompt';
 import ServiceDetails from './components/ServiceDetails/ServiceDetails';
-import ServicesList from "./components/ServicesList";
 import { useServicesContext } from './context';
 import { getServices } from "./data";
 import { Service } from "./types/service";
+import { SearchBar } from "@/components";
+import { IconButton, Loader } from "@/lib/components";
+import { NewServiceInput, ServiceDeletePrompt, ServicesList } from "./components";
 
 export default function ServicesPageContent() {
     const [ search, setSearch ] = useState("");
@@ -48,7 +45,7 @@ export default function ServicesPageContent() {
       }
 
       call();
-    }, [needRefresh, ]);
+    }, [needRefresh, newService]);
 
     const toggleAdd = useCallback(() => {
       setAdd(!addingInProgress);
@@ -79,17 +76,15 @@ export default function ServicesPageContent() {
                 onChange={setSearch}
               />
               <ActionsBar className='mt-2'>
-                <div
+                <IconButton 
                   onClick={toggleAdd}
-                  className='addService flex cursor-pointer select-none w-full h-8 justify-center border border-cream border-solid rounded-md hover:bg-cream active:bg-creamAccent'>
-                  <Image
-                    src="/images/add.svg"
-                    className={"transition " + (addingInProgress ? 'rotate-45' : "")}
-                    alt="add"
-                    height={32}
-                    width={32}
-                  />
-                </div>
+                  className='addService w-full h-8'
+                  icon="/images/add.svg"
+                  iconClassName={"transition " + (addingInProgress ? 'rotate-45' : "")}
+                  alt="add"
+                  h={32}
+                  w={32}
+                />
               </ActionsBar>
               { isServicesLoading ? (
                   <Loader wrapperClassName="mt-8" text="Loading services list..." />
@@ -103,7 +98,7 @@ export default function ServicesPageContent() {
                       services={services}
                       onSelect={selectService}
                     />) : (
-                      <p className='self-center mt-8'>No services yet. Let's create one</p>
+                      <p className='self-center mt-8'>No services yet. Let&apos;s create one</p>
                     )}
                   </div>
                 )

@@ -5,9 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  plugins: [
-    require('@tailwindcss/line-clamp'),
+    "./src/lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -31,7 +29,8 @@ const config: Config = {
       'creamAccent': '#E3D8BA',
       'white': '#FFFFFF',
       'black': '#010101',
-      'error': '#F92626'
+      'errorText': '#F92626',
+      'error': '#FF6060'
     }
   }
 };

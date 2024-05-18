@@ -9,7 +9,7 @@ type SearchBarProps = {
     onChange: (search: string) => void;
 }
 
-export default function SearchBar({ placeholder, onChange }: SearchBarProps) {
+export function SearchBar({ placeholder, onChange }: SearchBarProps) {
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => { 
         onChange(e.currentTarget.value);

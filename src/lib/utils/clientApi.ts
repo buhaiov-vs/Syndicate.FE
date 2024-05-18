@@ -1,7 +1,9 @@
 import config from '@/config';
 import { BaseApiResponse, ResponseErrorType } from '@/lib/types/response';
+import { RequestOptions } from '../types/requestOptions';
+import { toast } from 'react-toastify';
 
-type GetOptions = {
+export type GetOptions = {
   cacheTag?: string
 }
 const get = async (url: string, options?: GetOptions) => {
@@ -34,10 +36,10 @@ const get = async (url: string, options?: GetOptions) => {
   }
 };
 
-type PostOptions = {
-  waitForResponse?: boolean;
+export type PostOptions = {
+  ignoreResponse?: boolean;
 }
-const post = async (url: string, data?: object, options: PostOptions = { waitForResponse: true }) => {
+const post = async (url: string, data?: object, options?: RequestOptions<PostOptions>) => {
   try {
     const request = config.apiUrl + url;
     if (config.debug) {
@@ -55,16 +57,19 @@ const post = async (url: string, data?: object, options: PostOptions = { waitFor
       body: data ? JSON.stringify(data) : undefined,
     });
 
-    if (options.waitForResponse) {
-      const resp = await res.json();
-
-      if (config.debug) {
-        console.log('RESP', resp);
-      }
-
-      return resp;
+    if (options?.settings?.ignoreResponse) return
+    
+    const resp = await res.json();
+    if (config.debug) {
+      console.log('RESP', resp);
     }
+
+    return resp;
   } catch (error) {
+    if(!options?.settings?.ignoreNetworkError) {
+      toast.error("Sorry, we detected something wrong with network! Please, try again later.");
+    }
+
     return {
       error: {
         message: "Sorry, something went wrong! Please, try again later.",
@@ -75,7 +80,7 @@ const post = async (url: string, data?: object, options: PostOptions = { waitFor
 };
 
 
-type DeleteOptions = {
+export type DeleteOptions = {
   waitForResponse?: boolean;
 }
 const del = async (url: string, data?: object, options: DeleteOptions = { waitForResponse: true }) => {

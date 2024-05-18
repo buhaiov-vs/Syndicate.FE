@@ -1,9 +1,9 @@
-import Consts from "@/lib/consts";
 import Routes from "@/lib/routes";
 import { NextRequest, NextResponse } from "next/server"
+import { CookieNames } from "@/lib/consts";
 
 export function middleware(request: NextRequest) {
-    if(!request.cookies.has(Consts.CookieNames.auth)) {
+    if(!request.cookies.has(CookieNames.auth)) {
         return NextResponse.redirect(new URL(Routes.signIn, request.url))
     }
 

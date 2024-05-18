@@ -1,11 +1,13 @@
-import ServiceStatus from "../../types/serviceStatus";
+import { Service } from "../../types/service";
 
 type ServiceDetailsViewProps = {
+  service: Service
 }
 
-export default function ServiceDetailsView({}: ServiceDetailsViewProps) {
+export function ServiceDetailsView({ service }: ServiceDetailsViewProps) {
   return (
-    <div className="flex flex-1 bg-white rounded-md">
+    <div className="flex flex-1 bg-white rounded-md px-5">
+      View: {service.name}
     </div>
   );
 }

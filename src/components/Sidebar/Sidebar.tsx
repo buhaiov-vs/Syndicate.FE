@@ -5,7 +5,7 @@ import Image from "next/image";
 import SidebarMenuItem from "./SidebarMenuItem";
 import { useCallback, useState } from "react";
 
-export default function Sidebar() {
+export function Sidebar() {
   const [ open, toggle ] = useState(true);
   const onToggle = useCallback(() => {
     toggle(!open);

@@ -1,11 +1,13 @@
 import ServiceStatus from "./serviceStatus";
 
-export type Service = { 
+export type Service = {
     id: string,
     name: string,
     description?: string,
     status: ServiceStatus,
-    tags?: string[],
+    tags: string[],
+    price: string;
+    duration: number
 };
 
 export type DraftService = {

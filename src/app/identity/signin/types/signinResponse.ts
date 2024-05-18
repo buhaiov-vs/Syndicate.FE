@@ -1,5 +1,5 @@
-import BaseResponse from "@/lib/types/response";
+import { BaseResponse } from "@/lib/types/response";
 
-type SigninResponse = BaseResponse<{ userId: string }>;
+export type SigninResponse = BaseResponse<SigninData>;
 
-export default SigninResponse;
+export type SigninData = { userId: string }
