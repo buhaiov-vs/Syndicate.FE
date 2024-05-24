@@ -5,7 +5,7 @@ import { useLocalStorage } from '@/lib/utils/localStorage';
 import Link from 'next/link'
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { signin } from '../actions';
+import { signin } from '../_lib/actions';
 import { useRouter } from 'next/navigation';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -2,6 +2,7 @@ import config from '@/config';
 import { BaseApiResponse, ResponseErrorType } from '@/lib/types/response';
 import { RequestOptions } from '../types/requestOptions';
 import { toast } from 'react-toastify';
+import { CacheTags } from '../consts';
 
 export type GetOptions = {
   cacheTag?: string
@@ -13,16 +14,17 @@ const get = async (url: string, options?: GetOptions) => {
       console.log('GET ', request);
     }
 
-    var cacheTags = ['all'];
+    let cacheTags = [CacheTags.all, CacheTags.c_all];
     options?.cacheTag && cacheTags.push(options.cacheTag);
 
-    const res = await fetch(config.apiUrl + url, {
+    const res = await fetch(request, {
       credentials: 'include',
       next: {
         tags: cacheTags,
         revalidate: 3600,
       },
     });
+
     const resp = await res.json();
 
     if (config.debug) {
@@ -120,4 +122,4 @@ const del = async (url: string, data?: object, options: DeleteOptions = { waitFo
   }
 };
 
-export const api = { get, post, del };
+export const clientApi = { get, post, del };

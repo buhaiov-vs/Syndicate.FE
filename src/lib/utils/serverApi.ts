@@ -1,9 +1,11 @@
 import config from '@/config';
 import { cookies } from 'next/headers';
+import { CacheTags } from '../consts';
 
 type GetOptions = {
   cacheTag?: string
 }
+
 const get = async (url: string, options?: GetOptions) => {
   try {
     const request = config.apiUrl + url;
@@ -11,13 +13,14 @@ const get = async (url: string, options?: GetOptions) => {
       console.log('S GET ', request);
     }
 
-    var cacheTags = ['s_all'];
+    let cacheTags = [CacheTags.all, CacheTags.s_all];
     options?.cacheTag && cacheTags.push(options.cacheTag);
 
+    const a = cookies().toString();
+
     const res = await fetch(config.apiUrl + url, {
-      credentials: 'include',
       headers: {
-        Cookie: cookies().toString()
+        Cookie: a
       },
       next: {
         tags: cacheTags,
@@ -38,4 +41,4 @@ const get = async (url: string, options?: GetOptions) => {
   }
 };
 
-export const api = { get };
+export const serverApi = { get };

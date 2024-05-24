@@ -43,10 +43,6 @@ body {
   font-family: 'CenturyGothic', sans-serif;
 }
 
-.main {
-  height: calc(100vh - 4rem)
-}
-
 .custom-scroll {
   overflow: auto;
   scrollbar-gutter: stable;

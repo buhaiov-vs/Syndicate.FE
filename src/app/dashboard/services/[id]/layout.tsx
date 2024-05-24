@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Services",
 };
 
 export default function ServicesLayout({
-  list,
   children,
 }: Readonly<{
-  list: React.ReactNode;
-  children: React.ReactNode;  
+  children: React.ReactNode;
 }>) {
-  return (
-    <div className="flex flex-row mb-4 h-full">
-      {list}
+  return <div className="w-5/6 rounded mr-4 flex">
+    <Suspense fallback={<div>Loading...</div>}>
       {children}
-    </div>
-  );
+    </Suspense>
+  </div>;
 }

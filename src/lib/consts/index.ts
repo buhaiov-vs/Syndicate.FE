@@ -6,3 +6,4 @@ export * from './masks';
 export * from './regexs';
 export * from './validationMessages';
 export * from './validationRules';
+export * from './cacheTags';

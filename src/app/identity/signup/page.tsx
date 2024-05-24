@@ -3,9 +3,9 @@
 import Routes from '@/lib/routes'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { signup } from '../actions';
+import { signup } from '../_lib/actions';
 import { useLocalStorage } from '@/lib/utils/localStorage';
-import Consts from '@/lib/consts';
+import { LocalStorageKeys, Regexs, ValidationMessages } from '@/lib/consts';
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup';
@@ -21,16 +21,16 @@ export type SignupFormState = {
 
 const schema = yup
   .object({
-    name: yup.string().required(Consts.ValidationMessages.required),
-    username: yup.string().required(Consts.ValidationMessages.required),
-    password: yup.string().required(Consts.ValidationMessages.required),
-    email: yup.string().required(Consts.ValidationMessages.required).matches(Consts.Regexs.email, Consts.ValidationMessages.email)
+    name: yup.string().required(ValidationMessages.required),
+    username: yup.string().required(ValidationMessages.required),
+    password: yup.string().required(ValidationMessages.required),
+    email: yup.string().required(ValidationMessages.required).matches(Regexs.email, ValidationMessages.email)
   })
 .required()
 
 export default function SignUp() {
   const router = useRouter();
-  const [_, setUserId] = useLocalStorage<string>(Consts.LocalStorageKeys.userId);
+  const [_, setUserId] = useLocalStorage<string>(LocalStorageKeys.userId);
   const [errorMessage, setErrorMessage] = useState("");
 
   const { register, handleSubmit, control } = useForm<SignupFormState>({
