@@ -68,7 +68,7 @@ export default function ServiceDetailsForm({
   }
 
   return (
-    <div className="flex flex-1 bg-white rounded-md">
+    <>
       <form id='service-details-form' onSubmit={handleSubmit(submitHandler)} className="flex flex-col p-5 py-8 w-1/2">
         <ControlledInput 
           control={control}
@@ -108,6 +108,6 @@ export default function ServiceDetailsForm({
           </div>
         </div>
       </form>
-    </div>
+    </>
   );
 }

@@ -12,10 +12,14 @@ export default async function ServiceEditPage({ params }: ServiceEditPageProps) 
   return (error || !service) ? (
     <>
       Something went wrong. Please try again later.
-    </>) : (
-    <div className="flex flex-1 rounded-md flex-col">
-      <ServiceDetailsHeaderEdit service={service} />
-      <ServiceDetailsForm service={service} />
-    </div>
+    </>) : (    
+      <>
+      <div className="flex rounded-md flex-col">
+        <ServiceDetailsHeaderEdit service={service}  />
+      </div>  
+      <div className="flex flex-1 bg-white rounded-md mt-2">
+        <ServiceDetailsForm service={service} />
+      </div>
+    </>
   );
 }

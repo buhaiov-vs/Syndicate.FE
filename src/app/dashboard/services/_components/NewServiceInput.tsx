@@ -7,6 +7,7 @@ import React from 'react';
 import { ErrorText } from '@/lib/components';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
+import Routes from '@/lib/routes';
 
 type NewServiceInputProps = React.HTMLAttributes<HTMLDivElement> & {
   onSubmit: () => void;
@@ -31,6 +32,9 @@ export function NewServiceInput({ onSubmit, className }: NewServiceInputProps) {
     } else {
       startTransition(() => {
         onSubmit();
+        setNewName("");
+        setError("");
+        router.push(`${Routes.dashboardSevices}/${result.id}`);
         router.refresh();
       });
     }

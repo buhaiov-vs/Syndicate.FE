@@ -3,10 +3,11 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { ActionsBar, SearchBar } from "@/components";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IconButton } from "@/lib/components";
 import { Service } from "../_lib/types";
-import { NewServiceInput, ServiceDeletePrompt } from "../_components";
+import { NewServiceInput } from "../_components";
+import { useParams } from "next/navigation";
 
 type ServicesListProps = {
   activeServiceId?: string,
@@ -14,20 +15,19 @@ type ServicesListProps = {
   id?: string
 }
 
-export function ServicesList({ services, id }: ServicesListProps) {
+export function ServicesList({ services }: ServicesListProps) {
+  const { id } = useParams();
+
   const [ search, setSearch ] = useState("");
   const [ addingInProgress, setAddingInProgress ] = useState(false);
-  const [ deleteInProgress, setDeleteInProgress ] = useState(false);
 
   const toggleAdd = useCallback(() => {
     setAddingInProgress(!addingInProgress);
   }, [addingInProgress, setAddingInProgress])
 
-  const handleDelete = useCallback(() => {
-    setDeleteInProgress(!deleteInProgress);
-  }, [deleteInProgress, setDeleteInProgress])
+  useEffect(() => {
 
-  const selectedService = useMemo(() => services?.find(x => x.id === id), [services, id]);
+  }, [search])
 
   return (
     <>
@@ -47,7 +47,6 @@ export function ServicesList({ services, id }: ServicesListProps) {
         />
       </ActionsBar>
         <div className={"flex flex-col flex-1 " + (addingInProgress || "mt-1")}>
-          {deleteInProgress && id && <ServiceDeletePrompt id={id} name={selectedService!.name} onApprove={handleDelete} onDecline={() => setDeleteInProgress(false)} />}
           <NewServiceInput className={clsx({"hidden": !addingInProgress, "": !addingInProgress })} key="addInput" onSubmit={() => setAddingInProgress(false)} />
           {services ? (
             services.map(x =>

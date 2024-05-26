@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -7,12 +6,14 @@ export const metadata: Metadata = {
 
 export default function ServicesLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { id: string }
 }>) {
   return <div className="w-5/6 rounded mr-4 flex">
-    <Suspense fallback={<div>Loading...</div>}>
+    <div className="flex flex-1 rounded-md flex-col">
       {children}
-    </Suspense>
+    </div>
   </div>;
 }
