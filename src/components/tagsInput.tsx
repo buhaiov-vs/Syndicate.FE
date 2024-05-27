@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useController, Control, FieldValues } from 'react-hook-form';
 import { IconButton } from '@/lib/components';
 import { Symbols } from '@/lib/consts';
@@ -17,15 +17,28 @@ interface TagsInputProps<TFieldValues extends FieldValues> {
 
 export const TagsInput = ({ control, title, className, maxTagsCount = 10, tagMaxLength = 25, tagMinLength = 1 }: TagsInputProps<any>) => {
   const [ error, setError ] = useState("");
+  const [ hint, setHint ] = useState("");
   const [ flying, makeFly ] = useState(false);
   const controllerName = title.toLowerCase();
   const {
-    field: { value, onChange, ref, onBlur },
+    field: { value, onChange, onBlur },
     fieldState: { error: formError }
   } = useController({
     name: controllerName,
     control
   });
+
+  const {
+    field: { value: inputValue, onChange: inputOnChange, ref: inputRef, onBlur: inputOnBlur },
+    fieldState: { error: inputError }
+  } = useController({
+    name: `${controllerName}_input`,
+    control
+  });
+
+  useEffect(() => {
+    formError
+  }, []);
 
   const [tags, setTags] = useState<string[]>(value || []);
 
@@ -54,6 +67,8 @@ export const TagsInput = ({ control, title, className, maxTagsCount = 10, tagMax
         onChange(tags);
 
         event.currentTarget.value = '';
+        inputOnChange("");
+        setHint("");
       } else {
         setError("Tag already exists");
       }
@@ -73,18 +88,29 @@ export const TagsInput = ({ control, title, className, maxTagsCount = 10, tagMax
     blurHandler();
   }, [onChange]);
 
-  const focusHandler = () => {
+  const focusHandler = useCallback(() => {
     makeFly(true);
-  };
+  }, [makeFly]);
 
-  const blurHandler = () => {
+  const blurHandler = useCallback(() => {
+    inputOnBlur();
     onBlur();
-    makeFly(false);
-  };
+    if (inputValue) {
+      setHint("Press \"Enter\" to add tag");
+    } else {
+      makeFly(false);
+    }
+  }, [inputOnBlur, onBlur, setHint, inputValue, makeFly]);
+
+  const onChangeHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
+    setHint("");
+    inputOnChange(event);
+  }, [setError, inputOnChange]);
 
   return (
     <>
-    <div className={clsx("flex flex-col border border-creamAccent rounded-md flyable",
+    <div className={clsx("flex relative flex-col border border-creamAccent rounded-md flyable",
       {
         "flying": flying
       },
@@ -93,27 +119,20 @@ export const TagsInput = ({ control, title, className, maxTagsCount = 10, tagMax
       <div className='relative flex items-center'>
         <input
           type="text"
+          value={inputValue}
           onKeyDown={addTag}
           onFocus={focusHandler}
           onBlur={blurHandler}
-          onChange={() => setError("")}
-          ref={ref}
+          onChange={onChangeHandler}
+          ref={inputRef}
           className="flex-1 rounded-md py-2.5 px-4"
           maxLength={tagMaxLength}
           placeholder=' '
         />
         <label className='py-2.5 px-4 pointer-events-none flyable'>{title}</label>
-        <div className='absolute right-0'>
-          <IconButton 
-            className='py-1 px-2 rounded-md hover:bg-cream active:bg-creamAccent border-0'
-            icon="/images/clear-all 1.svg"
-            w={32}
-            h={32}
-            alt='clear'
-            onClick={removeAll}/>
-        </div>
       </div>
-      {!!tags.length && <div className='flex flex-row flex-wrap pt-1 pb-2.5 px-2'>
+      {!!tags.length && 
+      <div className='flex flex-row flex-wrap pt-1 pb-2.5 px-2 pr-12'>
         {tags.map((tag, index) => (
           <div
             key={index}
@@ -122,9 +141,19 @@ export const TagsInput = ({ control, title, className, maxTagsCount = 10, tagMax
             <button type="button" onClick={() => removeTag(index)} className="px-2">x</button>
           </div>
         ))}
+        <div className={clsx('absolute right-0 top-1/2', { "hidden": tags.length < 2 })}>
+          <IconButton 
+            className='py-1 px-2 rounded-md hover:bg-cream active:bg-creamAccent border-0'
+            icon="/images/clear-all 1.svg"
+            w={32}
+            h={32}
+            alt='clear'
+            onClick={removeAll}/>
+        </div>
       </div>}
     </div>
-    <span className="text-errorText">{error || formError?.message || Symbols.nbsp }</span>
+    <span className="text-errorText ">{error || formError?.message || Symbols.nbsp}</span>
+    <span className={clsx("text-creamAccent", { "hidden": error })}>{hint || Symbols.nbsp}</span>
     </>
   );
 };

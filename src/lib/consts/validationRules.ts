@@ -11,7 +11,7 @@ export const ValidationRules = {
     },
     Duration: {   // in minutes
       max: 715,   // 11h 55m
-      min: 5,
+      min: 6, // > 5
       step: 5
     }
   }

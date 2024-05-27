@@ -6,8 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ResizableTextArea } from "@/lib/components";
 import { ControlledInput } from '@/lib/components';
 import { TagsInput } from '@/components';
-import { Masks, Regexs, ValidationMessages, ValidationRules } from '@/lib/consts';
-import { ResponseError } from '@/lib/types/response';
+import { Masks, ValidationMessages, ValidationRules } from '@/lib/consts';
 import { updateService } from '@/app/dashboard/services/_lib/actions';
 import { Service } from '@/app/dashboard/services/_lib/types';
 import { useRouter } from 'next/navigation';
@@ -19,7 +18,7 @@ export type ServiceForm = {
   name: string,
   description?: string,
   tags: string[],
-  price: string,
+  price: number,
   duration: number
 }
 
@@ -28,9 +27,9 @@ const schema = yup
     id: yup.string().required(),
     name: yup.string().required(ValidationMessages.required),
     description: yup.string().max(ValidationRules.Service.Description.maxLength),
-    price: yup.string().required(ValidationMessages.required).matches(Regexs.price, ValidationMessages.priceFormat),
-    tags: yup.array().of(yup.string().required().max(ValidationRules.Service.Tag.maxLength)).min(ValidationRules.Service.Tag.minCount, ValidationMessages.required).max(ValidationRules.Service.Tag.maxCount).required(),
-    duration: yup.number().required(ValidationMessages.required).min(ValidationRules.Service.Duration.min).max(ValidationRules.Service.Duration.max),
+    price: yup.string().transform(x => x.replaceAll(",", "")).typeError(ValidationMessages.required).required(ValidationMessages.required).test('price-min', ValidationMessages.priceMin, x => Number(x) >= 0.01),
+    tags: yup.array().of(yup.string().required().max(ValidationRules.Service.Tag.maxLength)).min(ValidationRules.Service.Tag.minCount, ValidationMessages.tagsRequired).max(ValidationRules.Service.Tag.maxCount).required(),
+    duration: yup.number().required(ValidationMessages.required).min(ValidationRules.Service.Duration.min, ValidationMessages.durationMin).max(ValidationRules.Service.Duration.max),
   })
   .required();
 
@@ -49,7 +48,7 @@ export default function ServiceDetailsForm({
       name: service.name,
       description: service.description,
       tags: service.tags,
-      price: service.price,
+      price: Number(service.price),
       duration: service.duration
     },
     resolver: yupResolver(schema),
@@ -64,7 +63,8 @@ export default function ServiceDetailsForm({
       return;
     }
 
-    router.push('/');
+    router.back();
+    router.refresh();
   }
 
   return (
@@ -78,11 +78,11 @@ export default function ServiceDetailsForm({
           maxHeight="200px"
           maxLength={ValidationRules.Service.Description.maxLength}
           control={control}
-          className='mt-4'
+          className='mt-5'
           textareaClassName="appearance-none border border-creamAccent rounded-md text-primary py-2.5 px-4"
           title='Description'
         />
-        <div className='mt-4'>
+        <div className='mt-5'>
           <TagsInput
             maxTagsCount={ValidationRules.Service.Tag.maxCount}
             tagMaxLength={ValidationRules.Service.Tag.maxLength}
@@ -92,15 +92,16 @@ export default function ServiceDetailsForm({
           />
         </div>
         <div className='flex flex-row'>
-          <div className='flex mt-4 mr-4'>
+          <div className='flex mt-5 mr-4'>
             <ControlledInput
               control={control}
               title='Price'
+              defaultValue={0}
               inputClassName='currencyInput'
               mask={Masks.price}
             />
           </div>
-          <div className='flex mt-4 flex-col'>
+          <div className='flex mt-5 flex-col'>
             <TimespanPicker
               title="Duration"
               control={control}

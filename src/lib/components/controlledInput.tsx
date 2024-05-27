@@ -12,6 +12,7 @@ export interface ControlledInputProps<TFieldValues extends FieldValues> {
   title: string;
   type?: React.HTMLInputTypeAttribute,
   mask?: any,
+  defaultValue?: any;
   inputClassName?: string;
   disabled?: boolean;
 }
@@ -22,6 +23,7 @@ export const ControlledInput = ({
   className = "",
   type = "text",
   mask,
+  defaultValue,
   inputClassName,
   disabled = false
 }: ControlledInputProps<any>) => {
@@ -32,7 +34,8 @@ export const ControlledInput = ({
     fieldState: { error }
   } = useController({
     name: controllerName,
-    control
+    control,
+    defaultValue
   });
 
   useEffect(() => {
