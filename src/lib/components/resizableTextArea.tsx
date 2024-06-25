@@ -13,6 +13,8 @@ interface ResizableTextAreaProps<TFieldValues extends FieldValues> {
     title: string;
 }
 
+const MAX_NEWLINES = 5;
+
 export const ResizableTextArea = ({
   control,
   title,
@@ -38,6 +40,16 @@ export const ResizableTextArea = ({
 
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     const textarea = e.currentTarget;
+    var paragraphs = textarea.value.split("\n");
+    
+    if(paragraphs.length > MAX_NEWLINES) {
+      textarea.value = paragraphs.slice(0, MAX_NEWLINES+1).join("\n").concat(paragraphs.slice(MAX_NEWLINES+1).join(""))
+    }
+
+    fixHeight(textarea);
+  }
+
+  const fixHeight = (textarea: any) => {
     textarea.style.height = 'auto'; // Reset the height
     if (textarea.scrollHeight < parseInt(maxHeight, 10)) {
         textarea.style.height = `${textarea.scrollHeight}px`; // Set height equal to scroll height
@@ -59,10 +71,16 @@ export const ResizableTextArea = ({
     }
   };
 
+  useEffect(() => {
+    //fix textarea heigh on render with initial value
+    fixHeight(document.getElementById('service_description'));
+  }, [])
+
   return (
     <div className={className + " flex flex-col relative flyable " + (flying ? "flying" : "")}>
       <textarea
           {...field}
+          id='service_description'
           placeholder=' '
           onFocus={focusHandler}
           onBlur={blurHandler}

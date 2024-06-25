@@ -9,20 +9,20 @@ export async function getServices(): Promise<ServicesResponse> {
     try {
         response = await serverApi.get("/services", { cacheTag: CacheTags.servicesList }) as BaseApiResponse<Array<Service>>;
     } catch {
-        response = { error: { message: "Something went wrong.", type: ResponseErrorType.network } as ResponseError };
+        response = { errors: [{ message: "Something went wrong.", type: ResponseErrorType.network }] as ResponseError[] };
     }
 
-    return [ response.data, response.error ];
+    return [ response.data, response.errors ];
 }
 
 export async function getService(id: string): Promise<ServiceResponse> {
     let response;
     
     try {
-        response = await serverApi.get(`/services/${id}`) as BaseApiResponse<Service>;
+        response = await serverApi.get(`/services/${id}`, { cacheTag: CacheTags.serviceId }) as BaseApiResponse<Service>;
     } catch {
-        response = { error: { message: "Something went wrong.", type: ResponseErrorType.network } as ResponseError };
+        response = { error: [{ message: "Something went wrong.", type: ResponseErrorType.network }] as ResponseError[] };
     }
 
-    return [ response.data, response.error ];
+    return [ response.data, response.errors ];
 }

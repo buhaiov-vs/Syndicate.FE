@@ -18,7 +18,7 @@ export type ServiceForm = {
   name: string,
   description?: string,
   tags: string[],
-  price: number,
+  price: string,
   duration: number
 }
 
@@ -48,17 +48,22 @@ export default function ServiceDetailsForm({
       name: service.name,
       description: service.description,
       tags: service.tags,
-      price: Number(service.price),
+      price: service.price.toString(),
       duration: service.duration
     },
     resolver: yupResolver(schema),
   });
 
   const submitHandler: SubmitHandler<ServiceForm> = async (data) => {
-    const [, error] = await updateService(data);
+    const [, errors] = await updateService(data);
     
-    if (error) {
-      toast.error(error.message);
+    if (errors?.length) {
+      errors.forEach((value) => {
+        toast.error(value.message, {
+          className: 'whitespace-pre-wrap',
+          toastId: service.id
+        });
+      });
 
       return;
     }

@@ -1,10 +1,10 @@
 export type BaseApiResponse<T> = {
     data?: T,
-    error?: ResponseError,
+    errors?: ResponseError[],
 }
 
-export type BaseResponse<T> = [ T | undefined, ResponseError | undefined ];
-export type BaseListResponse<T> = [ Array<T> | undefined, ResponseError | undefined ];
+export type BaseResponse<T> = [ T | undefined, ResponseError[] | undefined ];
+export type BaseListResponse<T> = [ Array<T> | undefined, ResponseError[] | undefined ];
 
 export type ResponseError = {
     message: string;

@@ -6,7 +6,7 @@ export type Service = {
     description?: string,
     status: ServiceStatus,
     tags: string[],
-    price: string;
+    price: number,
     duration: number
 };
 

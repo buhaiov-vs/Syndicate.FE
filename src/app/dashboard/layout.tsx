@@ -28,6 +28,7 @@ export default function DashboardLayout({
               draggable
               pauseOnHover
               theme="light"
+              limit={3}
             />
         </div>
     </div>

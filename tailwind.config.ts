@@ -24,6 +24,7 @@ const config: Config = {
       }
     },
     colors: {
+      'success': '#03AC13',
       'cream': '#EEE8D8',
       'creamLight': '#F5F1E5',
       'creamAccent': '#E3D8BA',
