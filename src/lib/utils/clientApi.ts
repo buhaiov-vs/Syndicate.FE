@@ -18,7 +18,7 @@ const get = async (url: string, options?: GetOptions) => {
     let cacheTags = [CacheTags.all, CacheTags.c_all];
     options?.cacheTag && cacheTags.push(options.cacheTag);
 
-    const res = await fetch(request, {
+    const response = await fetch(request, {
       credentials: 'include',
       next: {
         tags: cacheTags,
@@ -26,13 +26,13 @@ const get = async (url: string, options?: GetOptions) => {
       },
     });
 
-    const resp = await res.json();
+    const body = await response.json();
 
     if (config.debug) {
-      console.log('RESP', resp);
+      console.log('RESP', body);
     }
 
-    return resp;
+    return body;
   } catch (error) {
     console.error(error);
     throw new Error('Failed to fetch data');
@@ -51,7 +51,7 @@ const post = async <T>(url: string, data?: object, options?: RequestOptions<Post
       console.log('BODY ', data);
     }
 
-    const res = await fetch(config.apiUrl + url, {
+    const response = await fetch(config.apiUrl + url, {
       cache: 'no-store',
       method: 'POST',
       headers: {
@@ -61,23 +61,23 @@ const post = async <T>(url: string, data?: object, options?: RequestOptions<Post
       body: data ? JSON.stringify(data) : undefined,
     });
 
-    if (options?.settings?.ignoreResponse) return Promise.resolve({});
-    if (res.status != 200 && !options?.settings?.readErrorResponse) {
+    if (options?.settings?.ignoreResponse && response.status == 200) return Promise.resolve({});
+    if (response.status != 200 && !options?.settings?.readErrorResponse) {
       return Promise.resolve({
         errors: [{
-          code: res.status,
+          code: response.status,
           message: "Sorry, something went wrong! Please, try again later.",
           type: ResponseErrorType.api
         }]
       });
     }
     
-    const resp = await res.json();
+    const body = await response.json();
     if (config.debug) {
-      console.log('RESP', resp);
+      console.log('RESP', body);
     }
 
-    return resp;
+    return body;
   } catch (error) {    
     if(!options?.settings?.ignoreNetworkError) {
       toast.error("Sorry, we detected something wrong with network! Please, try again later.");

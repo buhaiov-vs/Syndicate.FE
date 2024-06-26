@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 import { TimespanPicker } from '@/components';
 
 export type ServiceForm = {
-  id: string,
   name: string,
   description?: string,
   tags: string[],
@@ -24,7 +23,6 @@ export type ServiceForm = {
 
 const schema = yup
   .object({
-    id: yup.string().required(),
     name: yup.string().required(ValidationMessages.required),
     description: yup.string().max(ValidationRules.Service.Description.maxLength),
     price: yup.string().transform(x => x.replaceAll(",", "")).typeError(ValidationMessages.required).required(ValidationMessages.required).test('price-min', ValidationMessages.priceMin, x => Number(x) >= 0.01),
@@ -44,7 +42,6 @@ export default function ServiceDetailsForm({
   const { handleSubmit, control } = useForm<ServiceForm>({
     mode: 'onSubmit',
     defaultValues: {
-      id: service.id,
       name: service.name,
       description: service.description,
       tags: service.tags,
@@ -55,7 +52,7 @@ export default function ServiceDetailsForm({
   });
 
   const submitHandler: SubmitHandler<ServiceForm> = async (data) => {
-    const [, errors] = await updateService(data);
+    const [, errors] = await updateService(service.id, data);
     
     if (errors?.length) {
       errors.forEach((value) => {

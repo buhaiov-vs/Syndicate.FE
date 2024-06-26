@@ -3,7 +3,8 @@ const Routes = {
     signUp: "/identity/signup",
     dashboard: "/dashboard",
     services: "/services",
-    dashboardSevices: "/dashboard/services",
+    dashboardServices: "/dashboard/services",
+    dashboardServicesFolders: "/dashboard/services/folders",
 }
 
 export default Routes;

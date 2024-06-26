@@ -22,7 +22,7 @@ export default function Sidebar() {
             <SidebarItem route={Routes.dashboard} exact img={"/images/dashboard_1.svg"} alt="D" w={40} h={40}>
                 Dashboard
             </SidebarItem>
-            <SidebarItem route={Routes.dashboardSevices} img={"/images/services_1.svg"} imgClassName="p-1.5" alt="D" w={30} h={30}>
+            <SidebarItem route={Routes.dashboardServices} img={"/images/services_1.svg"} imgClassName="p-1.5" alt="D" w={30} h={30}>
                 Services
             </SidebarItem>
           </ul>

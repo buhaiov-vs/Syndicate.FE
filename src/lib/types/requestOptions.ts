@@ -1,5 +1,5 @@
 export type RequestOptions<T> = {
-  headers: any,
+  headers?: any,
   settings?: T & {
     ignoreNetworkError?: boolean,    
   },

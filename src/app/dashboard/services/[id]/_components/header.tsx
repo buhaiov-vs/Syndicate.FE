@@ -98,7 +98,7 @@ export default function ServiceDetailsHeader({ service }: ServiceDetailsHeaderPr
               PUBLISH
             </button>
           }
-          <Link href={`${Routes.dashboardSevices}/${service.id}/edit`} className="w-36 pl-2 h-8 border-error ml-5 justify-between">
+          <Link href={`${Routes.dashboardServices}/${service.id}/edit`} className="w-36 pl-2 h-8 border-error ml-5 justify-between">
             <IconButton
                 className="w-36 h-8 pl-2 border-black"
                 prefix="EDIT"

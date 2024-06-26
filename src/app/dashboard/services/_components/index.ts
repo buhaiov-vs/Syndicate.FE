@@ -1,3 +1,3 @@
-export * from './NewServiceInput';
+export * from './NewItemInput';
 export * from './ServiceDeletePrompt';
 export * from './ServicesList';
